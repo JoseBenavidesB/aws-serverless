@@ -16,7 +16,8 @@ const addTask = async(event) => {
             id,
             title,
             description,
-            createdAt
+            createdAt,
+            done: false
         };
 
         //put the new task into DynamoDB
@@ -27,7 +28,7 @@ const addTask = async(event) => {
 
         // return the new created task
         return {
-            statusCode: 200,
+            status: 200,
             body: JSON.stringify(newTask)
         };
     } catch (error) {
