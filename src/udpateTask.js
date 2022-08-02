@@ -6,14 +6,16 @@ const updateTask = async (event) => {
     try {
         const dynamoDb = AWS.DynamoDB.DocumentClient();
         const {id} = event.pathParameters;
-        const { done } = JSON.parse(event.body)
+        const { done, title, description } = JSON.parse(event.body)
 
         const result = await dynamoDb.update({
             TableName: 'TaskTable',
             Key: {id},
-            UpdateExpression: 'set done = :done',
+            UpdateExpression: 'set done = :done, title= :title, description= :description',
             ExpressionAttributeValues: {
-                ':donde': done
+                ':donde': done,
+                ':title': title,
+                ':description': description
             },
             ReturnValues: 'ALL_NEW'
         }).promise();
