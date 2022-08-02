@@ -3,31 +3,35 @@ const AWS = require('aws-sdk');
 
 const addTask = async(event) => {
 
-    const { title, description } = JSON.parse(event.body);
-    const createdAt = new Date();
-    const id = v4();
+    try {
+        const { title, description } = JSON.parse(event.body);
+        const createdAt = new Date();
+        const id = v4();
 
-    //connect to DynamoDB
-    const dynamoDb = new AWS.DynamoDB.DocumentClient();
+        //connect to DynamoDB
+        const dynamoDb = new AWS.DynamoDB.DocumentClient();
 
-    //new task
-    const newTask = {
-        id,
-        title,
-        description,
-        createdAt
-    };
+        //new task
+        const newTask = {
+            id,
+            title,
+            description,
+            createdAt
+        };
 
-    //put the new task into DynamoDB
-    await dynamoDb.put({
-        TableName: 'TaskTable',
-        Item:newTask
-    }).promise();
+        //put the new task into DynamoDB
+        await dynamoDb.put({
+            TableName: 'TaskTable',
+            Item:newTask
+        }).promise();
 
-    // return the new created task
-    return {
-        statusCode: 200,
-        body: JSON.stringify(newTask)
+        // return the new created task
+        return {
+            statusCode: 200,
+            body: JSON.stringify(newTask)
+        };
+    } catch (error) {
+        console.log(error);
     };
 
 };
